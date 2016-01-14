@@ -2,6 +2,7 @@
 ##会话控制器
 登录和退出功能由会话控制器中的相应动作处理,登录表单在new动作中处理(本节的内容),登录的过程是向create动作发送POST请求(8.2 节),退出则是向destroy动作发送DELETE请求.
 `rails g controller Sessions new`
+
 *config/routes.rb*
 ```rails
 get 'login' => 'sessions#new'
@@ -207,6 +208,7 @@ end
 ```
 ##记忆令牌和摘要
 经过上述分析，我们计划按照下面的方式实现持久会话：
+
 1. 生成随机字符串，当做记忆令牌；
 2. 把这个令牌存入浏览器的 cookie 中，并把过期时间设为未来的某个日期；
 3. 在数据库中存储令牌的摘要；
