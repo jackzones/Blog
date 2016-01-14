@@ -67,6 +67,7 @@ flash[:danger] = 'Invalid email/password combination' # 不完全正确
 ```
 ##测试闪现消息
 `$ rails generate integration_test users_login`
+
 *test/integration/users_login_test.rb*
 ```
 require 'test_helper'
@@ -86,6 +87,7 @@ end
 
 ```
 **测试步骤**
+
 1. 访问登录页面；
 2. 确认正确渲染了登录表单；
 3. 提交无效的 params 哈希，向登录页面发起 post 请求；
@@ -97,6 +99,7 @@ end
 `bundle exec rake test TEST=test/integration/users_login_test.rb`
 
 **变绿方法**
+
 `flash.now[:danger] = 'Invalid email/password combination'`
 `flash.now` 专门用于在重新渲染的页面中显示闪现消息.
 
