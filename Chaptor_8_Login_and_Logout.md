@@ -9,6 +9,7 @@ delete 'logout' => 'sessions#destroy'
 ```
 ##登录表单
 *sessions/new.html.erb*界面添加表单，用来提交和显示login信息。
+
 **form_for(@user) 的作用是让表单向 /users 发起 POST 请求。对会话来说，我们需要指明资源的名字以及相应的 URL**
 ```rails
 form_for(:session, url: login_path)
@@ -54,6 +55,8 @@ def create
 `find_by`成功返回：user的hash，没有找到则返回nil
 `user.authenticate`若密码一样，则返回：user的hash
 ###&&的解释
-`user`为空，nil && 为nil，则不进行`authenticate`方法，返回`false`，
+`user`为空，nil && 为nil，则不进行`authenticate`方法，返回`false`.
+
 `user`有返回值，但是，user.authenticate验证不通过，返回`false`，整体为`false`
+
 `user`有返回值，user.authenticate有返回值，返回：user的hash。除了`nil`和`false`之外，所有对象都视作true，整体返回`true`
