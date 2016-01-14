@@ -1,3 +1,7 @@
 #My Blog
- * I love it
- * i love it 
+
+ * RailsTutorial
+ * Linux
+ * Git
+ * Testing
+ * Life
