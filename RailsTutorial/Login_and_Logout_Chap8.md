@@ -15,7 +15,7 @@ delete 'logout' => 'sessions#destroy'
 form_for(:session, url: login_path)
 ```
 *sessions/new.html.erb*
-```rails
+```Ruby on Rails
 <% provide(:title, "Log in") %>
 <h1>Log in</h1>
 
@@ -60,3 +60,45 @@ def create
 `user`有返回值，但是，user.authenticate验证不通过，返回`false`，整体为`false`
 
 `user`有返回值，user.authenticate有返回值，返回：user的hash。除了`nil`和`false`之外，所有对象都视作true，整体返回`true`
+##渲染闪现消息
+在 7.3.3 节，我们使用用户模型的验证错误显示注册失败时的错误消息。这些错误关联在某个 Active Record 对象上，不过现在不能使用这种方式了，因为会话不是 Active Record 模型。我们要采取的方法是，登录失败时，在闪现消息中显示消息。
+
+```      flash[:danger] = 'Invalid email/password combination' # 不完全正确
+```
+##测试闪现消息
+`$ rails generate integration_test users_login`
+*test/integration/users_login_test.rb*
+```
+require 'test_helper'
+
+class UsersLoginTest < ActionDispatch::IntegrationTest
+
+  test "login with invalid information" do
+    get login_path
+    assert_template 'sessions/new'
+    post login_path, session: { email: "", password: "" }
+    assert_template 'sessions/new'
+    assert_not flash.empty?
+    get root_path
+    assert flash.empty?
+  end
+end
+```
+**测试步骤**
+1. 访问登录页面；
+2. 确认正确渲染了登录表单；
+3. 提交无效的 params 哈希，向登录页面发起 post 请求；
+4. 确认重新渲染了登录表单，而且显示了一个闪现消息；
+5. 访问其他页面（例如首页）；
+6. 确认这个页面中没显示前面那个闪现消息。
+
+只测试单个文件的方法：
+`bundle exec rake test TEST=test/integration/users_login_test.rb`
+
+**变绿方法**
+`flash.now[:danger] = 'Invalid email/password combination'`
+`flash.now` 专门用于在重新渲染的页面中显示闪现消息.
+
+
+
+
