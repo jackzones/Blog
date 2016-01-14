@@ -15,7 +15,7 @@ delete 'logout' => 'sessions#destroy'
 form_for(:session, url: login_path)
 ```
 *sessions/new.html.erb*
-```Ruby on Rails
+```
 <% provide(:title, "Log in") %>
 <h1>Log in</h1>
 
