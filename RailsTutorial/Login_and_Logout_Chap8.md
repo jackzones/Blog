@@ -141,7 +141,7 @@ end
       redirect_to user
 ```
 
-`redirect_to user`rails会自动把地址转换成当前用户资料页的地址。`user_url(user)`
+`redirect_to user`rails会自动把地址转换成当前用户资料页的地址:`user_url(user)`
 
 ##当前用户
 *app/helpers/sessions_helper.rb*
@@ -162,4 +162,58 @@ end
   end
 ```
 ##测试布局中的变化
+测试步骤：
+1. 访问登录页面；
+2. 通过 post 请求发送有效的登录信息；
+3. 确认登录链接消失了；
+4. 确认出现了退出链接；
+5. 确认出现了资料页面链接。
+
+```
+  test "login with valid information" do
+    get login_path
+    post login_path, session: { email: @user.email, password: 'password' }
+    assert_redirected_to @user
+    follow_redirect!
+    assert_template 'users/show'
+    assert_select "a[href=?]", login_path, count: 0
+    assert_select "a[href=?]", logout_path
+    assert_select "a[href=?]", user_path(@user)
+  end
+```
+
+`assert_redirected_to @user` 检查重定向的地址是否正确；
+
+使用 follow_redirect! 访问重定向的目标地址。
+
+还确认页面中有零个登录链接，从而确认登录链接消失了。
+
+#退出
+*app/helpers/sessions_helper.rb*
+
+```
+  # 退出当前用户
+  def log_out
+    session.delete(:user_id)
+    @current_user = nil
+  end
+```
+*app/controllers/sessions_controller.rb*
+```
+  def destroy
+    log_out
+    redirect_to root_url
+  end
+```
+##记忆令牌和摘要
+经过上述分析，我们计划按照下面的方式实现持久会话：
+1. 生成随机字符串，当做记忆令牌；
+2. 把这个令牌存入浏览器的 cookie 中，并把过期时间设为未来的某个日期；
+3. 在数据库中存储令牌的摘要；
+4. 在浏览器的 cookie 中存储加密后的用户 ID；
+5. 如果 cookie 中有用户的 ID，就用这个 ID 在数据库中查找用户，并且检查 cookie 中的记忆令牌和数据库中的哈希摘要是否匹配。
+
+`rails generate migration add_remember_digest_to_users remember_digest:string`
+
+
 
