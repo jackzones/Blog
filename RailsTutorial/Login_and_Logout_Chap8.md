@@ -62,8 +62,8 @@ def create
 `user`有返回值，user.authenticate有返回值，返回：user的hash。除了`nil`和`false`之外，所有对象都视作true，整体返回`true`
 ##渲染闪现消息
 在 7.3.3 节，我们使用用户模型的验证错误显示注册失败时的错误消息。这些错误关联在某个 Active Record 对象上，不过现在不能使用这种方式了，因为会话不是 Active Record 模型。我们要采取的方法是，登录失败时，在闪现消息中显示消息。
-
-```      flash[:danger] = 'Invalid email/password combination' # 不完全正确
+```
+flash[:danger] = 'Invalid email/password combination' # 不完全正确
 ```
 ##测试闪现消息
 `$ rails generate integration_test users_login`
