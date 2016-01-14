@@ -1,3 +1,4 @@
+#无效的表单
 ##会话控制器
 登录和退出功能由会话控制器中的相应动作处理,登录表单在new动作中处理(本节的内容),登录的过程是向create动作发送POST请求(8.2 节),退出则是向destroy动作发送DELETE请求.
 `rails g controller Sessions new`
@@ -86,7 +87,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
 end
 
 ```
-**测试步骤**
+**测试步骤:**
 
 1. 访问登录页面；
 2. 确认正确渲染了登录表单；
@@ -98,11 +99,67 @@ end
 只测试单个文件的方法：
 `bundle exec rake test TEST=test/integration/users_login_test.rb`
 
-**变绿方法**
+**变绿方法:**
 
 `flash.now[:danger] = 'Invalid email/password combination'`
 `flash.now` 专门用于在重新渲染的页面中显示闪现消息.
 
+#有效的表单
+本节通过临时会话让用户登录，浏览器关闭后会话自动失效。
 
+8.4 节会实现持久会话，即便浏览器关闭，依然处于登录状态。
 
+如果在控制器的基类（ApplicationController）中引入辅助方法模块，还可以在控制器中使用,**辅助方法模块会自动引入 Rails 视图**.
+
+*app/controllers/application_controller.rb*
+
+`include SessionsHelper`
+
+# session[:user_id] 和 session.user_id的区别？
+model的实例可以使用`.`号获取属性。
+
+hash只能用[:key]获取。
+
+`session`方法创建的临时 cookie 会自动加密，**此处的session是rails提供的方法，不是session控制器。**
+
+*app/helpers/sessions_helper.rb*
+
+```
+module SessionsHelper
+
+  # 登入指定的用户
+  def log_in(user)
+    session[:user_id] = user.id
+  end
+end
+```
+
+*app/controllers/sessions_controller.rb*
+
+```
+      log_in user
+      redirect_to user
+```
+
+`redirect_to user`rails会自动把地址转换成当前用户资料页的地址。`user_url(user)`
+
+##当前用户
+*app/helpers/sessions_helper.rb*
+
+```
+  # 返回当前登录的用户（如果有的话）
+  def current_user
+    @current_user ||= User.find_by(id: session[:user_id])
+  end
+```
+##修改布局中的链接
+*app/helpers/sessions_helper.rb*
+
+```
+  # 如果用户已登录，返回 true，否则返回 false
+  def logged_in?
+    !current_user.nil?
+  end
+```
+##测试布局中的变化
 
