@@ -16,7 +16,9 @@
 * server发送Final标志,client还没有发送Final标识,server一定要回复client一下"Next Message":
 + "Next Message"回复包含Alert code 1222(或者1223停止),状态为SyncHdr,没有其他命令和标志.
 + server如果可能的话一定要在每个消息里发送Final标识.这点在发送一个大的对象时或者发送"Next Message"时,是不可能的.
+
 ###Large Object Handling
+
 * 此协议提供一种方法使超过尺寸的对象能同时在一个消息中传输.实现方式为,把对象分割成能适应消息的段,用<MoreData/>元素来标识让接受者知道此条数据是不完整的还有其他段消息发送.
 * Client应该支持Large Objects,servers一定要支持Large Objects
 * 接收到有<MoreData/>元素的对象,接受者一定要回复status"213-Chunked item accepted and buffered",如果没有其他命令发送,用Alert 1222激发下一条消息,如section6 定义的机制.
@@ -28,6 +30,56 @@
 * MaxObjSize保持在整个DM回话的影响,除非接下来的消息中有新值.
 * 如果item被分割成多条消息,Meta信息中的<Size>元素一定用来提示接受者,数据对象的全部的大小.<Size>元素一定只在第一段条目中.
 * 接受最后一段,接受者一定验证重建的段是否和对象的发送者发送的Meta信息中的<Size>一致.如果不一致,error status 424- "Size mismatch",接受者一定不提交命令.发送者可能尝试重新发送全部的数据对象.
-* 如果接受者在先前的item完成之前发现一个新的数据对象或者命令,接受者一定回复Alert 1225-"End of Data for chunked object not received".Alert应该包含来自原始命令的源和目标信息,使发送者定位失败的命令.
+* 如果接受者在先前的item完成之前发现一个新的数据对象或者命令,接受者一定回复Alert 1225-"End of Data for chunked object not received".Alert应该包含来自原始命令的源和目标信息,使发送者定位失败的命令.*Status不适合这,由于不涉及command Id.* 接受者一定不要提交命令,发送者可能尝试重新传输整个数据对象.
+
+###OMA DM Protocol packages
+*open mobile alliance device management protocol packages*
+
+OMA DM协议由两部分组成:建立阶段(认证和设备信息交互)和管理阶段.管理阶段可以认为是server的多次期望.Management会话以Package 0开始.
+
+* 管理阶段由大量的协议交互组成.server发向client的包的内容决定会话是否继续.如果server在包中发送需要client回复(status or results)的管理操作,在管理阶段,client发送一系列包含client对管理操作的回复给server.client回复的包开始一个新的协议交互.server可以发送一个新的管理操作,因此新建了一个新的协议交互.
+* 在管理阶段,当server发送到client的包不包含管理操作或者challenge,client将创建一个只包含Status for SyncHdr的回复.这种情况下,整个回复包一定不发送并且协议终止.server一定给所有的client包发送回复包.
+* 包处理过程需要很长时间.因此OMA DM协议在包中没有定义超时.
+* 如果没有被Sequence或者Atomic命令封装,client和server可能自由的选择管理命令的执行顺序.然而,当执行顺序按照上层管理命令,命令必须按照他们发送的顺序执行.
+* client一定不能发送除了Replace命令包含DevInfo,Results 和 Alert命令之外的命令给server.
+
+###Session Abort
+
+* client和server可以随时终止会话.因为会话终止可以server关闭,client断电,用户交互等.这种情况下,最好在终止的部分发送SESSION ABORT **ALERT**.建议消息包含Status和Results命令,在终止操作之前的终止部分.
+* 如果接收到Session Abort之后,发送一个回复,这个回复会被忽略.
+* Alert 1223用来标志不可预期的终止.
+* client接收Alert 1223 不应该回复.
+
+###Package 0: Management Initiation Alert from server to client
+很多设备不能持续监听来自server的连接,其他设备也不想打开一个端口,出于安全考虑.然而,大部分设备能接受未经许可的消息,又是我们叫做"notifications".
+
+管理服务器可以使用"nitifications"让client建立连接和server的连接.oma协议定义了几个通知的纽带.定义的纽带和通知内容可以在[DMNOTI]手册中找到.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
