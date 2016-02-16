@@ -16,7 +16,9 @@
 * server发送Final标志,client还没有发送Final标识,server一定要回复client一下"Next Message":
 + "Next Message"回复包含Alert code 1222(或者1223停止),状态为SyncHdr,没有其他命令和标志.
 + server如果可能的话一定要在每个消息里发送Final标识.这点在发送一个大的对象时或者发送"Next Message"时,是不可能的.
+
 ###Large Object Handling
+
 * 此协议提供一种方法使超过尺寸的对象能同时在一个消息中传输.实现方式为,把对象分割成能适应消息的段,用<MoreData/>元素来标识让接受者知道此条数据是不完整的还有其他段消息发送.
 * Client应该支持Large Objects,servers一定要支持Large Objects
 * 接收到有<MoreData/>元素的对象,接受者一定要回复status"213-Chunked item accepted and buffered",如果没有其他命令发送,用Alert 1222激发下一条消息,如section6 定义的机制.
