@@ -82,10 +82,10 @@ client到server产生的包(Package 1)的具体要求如下:
 
 3. 用SyncBody里的Replace命令发送设备信息.Replace命令的要求如下:
 
-* CmdID必须有
-* 设备信息树的每个节点创立一个Item元素.可能的节点定义在[DMSTDOBJ]
-* Item中的Source元素要有节点URI的值.
-* Data元素承载设备信息数据.
+	* CmdID必须有
+	* 设备信息树的每个节点创立一个Item元素.可能的节点定义在[DMSTDOBJ]
+	* Item中的Source元素要有节点URI的值.
+	* Data元素承载设备信息数据.
 
 4. client可能包含client-generated Alarts 如Client Event [REPPRO] or Generic Alert.
 
@@ -105,35 +105,83 @@ package2的细节要求:
 
 1. SyncHdr里的元素的要求:
 
-* VerDTD值为1.2
-* VerProt值为DM/1.2
-* SessioID包括表示管理会话的ID
-* MsgID识别属于server到client的管理会话的消息
-* Target识别目标设备
-* Source识别源设备
+	* VerDTD值为1.2
+	* VerProt值为DM/1.2
+	* SessioID包括表示管理会话的ID
+	* MsgID识别属于server到client的管理会话的消息
+	* Target识别目标设备
+	* Source识别源设备
 
 2. 接收到client发来的SyncHdr和Alerts,sever在SyncBody里回复Status.
 
 3. 任何管理操作包括在SyncML文档中(如Alert,Sequence,Replace)的user interaction,被放置到SyncBody中.
 
-* CmdID是必须的
-* 如果URI需要进一步确定源数据集,Source是必须的
-* 如果URI需要进一步确定目标数据集,Target是必须的
-* 除非命令不需要Data元素,否则Item里的Data元素用来包括数据自身.
-* 操作或者Item里的Meta元素必须使用,当Type或者Format不是默认的值[META].
+	* CmdID是必须的
+	* 如果URI需要进一步确定源数据集,Source是必须的
+	* 如果URI需要进一步确定目标数据集,Target是必须的
+	* 除非命令不需要Data元素,否则Item里的Data元素用来包括数据自身.
+	* 操作或者Item里的Meta元素必须使用,当Type或者Format不是默认的值[META].
 
 4. Final元素用于SyncBody中,表示包中的最后一个消息.
 
 ###Package 3: Client response sent to server
+package的内容包括:
+* server发送到client的action结果
+* user interaction命令的结果
+* client新产生的alert,如会话过程中产生的Generic Alert or Client Event [REPPRO].
 
+**package3由client发送,如果package2包含需要client回复的management commands**
 
+package3的细节要求:
 
+1. SyncHdr里的元素要求:
+	* VerDTD值为1.2
+	* VerProto值为Dm/1.2
+	* SessionID表明管理会话的ID
+	* MsgID识别管理会话的从server到client的消息
+	* Target元素识别目标设备
+	* Source元素识别源设备
+2. 回复来自设备SyncHdr和Alert命令,server用SyncBody里的Status
+3. 回复package2server发送的管理操作,用Syncbody中的status
+4. SyncBody里的Result响应,前一个包server发送的Get操作,集体要求如下:
+	+ Result一定包含描述Data内容的Type和Format的Meta元素,除非Type和Format有默认值[META].
+	+ Resutl里的Item包含Source元素,用来确定源URI
+5. client可以发送client generated alerts,如Client Event [REPPRO] or Generic Alert.
 
+SyncBody里的Final元素标识包里的最后一个消息.
 
+###Package 4: Further server management operations
+package4用来关闭management session.如果server在Package4中发送任何需要client回复的操作,协议将会在Package3中重建一个新的协议交互.如果在前一个包中接收到任何来自client的alerts,server发送Client Initiated Alerts的结果.
 
+1. SyncHdr元素里的元素的要求:
 
+	* VerDTD值为1.2
+	* VerProt值为DM/1.2
+	* SessioID包括表示管理会话的ID
+	* MsgID识别属于server到client的管理会话的消息
+	* Target识别目标设备
+	* Source识别源设备
 
+2. Status响应设备管理服务器(device management server)发送的SyncBody中的SyncHdr.如果client发送了任何Alerts ,server一定要发送这些Alerts的Status.
 
+3. 任何管理操作包括在SyncML文档中(如Alert,Sequence,Replace)的user interaction,被放置到SyncBody中.
+
+	* CmdID是必须的
+	* 如果URI需要进一步确定源数据集,Source是必须的
+	* 如果URI需要进一步确定目标数据集,Target是必须的
+	* 除非命令不需要Data元素,否则Item里的Data元素用来包括数据自身.
+	* 操作或者Item里的Meta元素必须使用,当Type或者Format不是默认的值[META].
+
+Final元素用在SyncBody中,表示包中最后的消息.Package4可以关闭management session,通过只包含<Final>元素.同时server可以发送Session Abort Alert (1223)强制关闭会话.
+###Generic Alert
+
+协议为与Management Object有关系的client产生的Alerts定义了Generic Alert消息.
+Management Object关联,Source和LocURI一定识别Management Object的地址.
+client或者server激发Management Alert之后,client需要发送一条Generic Alert消息给server.
+**Generic Alert消息只能从client发送到server.**server接收到Generic Alert之后,server要响应如何处理所有Items的status.
+
+client可能发送多个有Generic Alert的Alert消息或者具有一个或多个Generic Alert的Alert消息里的多个Items捆绑一起.
+generic alert消息里的Data在协议里没有具体说明,协议确定client如何通知server Type和Format是什么.
 
 
 
