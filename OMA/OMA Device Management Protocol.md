@@ -67,17 +67,18 @@ client到server产生的包(Package 1)的具体要求如下:
 
 1. SyncHdr元素的要求
 
-* VerDTD元素的值为1.2
-* VERProto元素的值为DM/1.2
-* SessionID包含会话的ID.如果client回复alert code SERVER-INITIATED MGMT (1200)通知,SessionID和通知中的一致.否则client要产生不重复的SessionID.同样的SessionID要应用与整个对话中.
-* MsgID识别server到client的会话消息
-* Target识别目标server
-* Source识别源设备
-* Cred在client到server的认证消息中.
+	* VerDTD元素的值为1.2
+	* VERProto元素的值为DM/1.2
+	* SessionID包含会话的ID.如果client回复alert code SERVER-INITIATED MGMT (1200)通知,SessionID和通知中的一致.否则client要产生不重复的SessionID.同样的SessionID要应用与整个对话中.
+	* MsgID识别server到client的会话消息
+	* Target识别目标server
+	* Source识别源设备
+	* Cred在client到server的认证消息中.
 
 2. Alert在SyncBody中,不论是client还是server激发的管理会话.
-* CmdID是必须的
-* Data元素承载管理会话的类型SERVER-INITIATED MGMT (1200)或者CLIENT-INITIATED MGMT (1201).
+
+	* CmdID是必须的
+	* Data元素承载管理会话的类型SERVER-INITIATED MGMT (1200)或者CLIENT-INITIATED MGMT (1201).
 
 3. 用SyncBody里的Replace命令发送设备信息.Replace命令的要求如下:
 
