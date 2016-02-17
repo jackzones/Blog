@@ -76,7 +76,6 @@ client到server产生的包(Package 1)的具体要求如下:
 * Cred在client到server的认证消息中.
 
 2. Alert在SyncBody中,不论是client还是server激发的管理会话.
-
 * CmdID是必须的
 * Data元素承载管理会话的类型SERVER-INITIATED MGMT (1200)或者CLIENT-INITIATED MGMT (1201).
 
