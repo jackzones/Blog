@@ -55,6 +55,163 @@ OMA DM协议由两部分组成:建立阶段(认证和设备信息交互)和管�
 
 管理服务器可以使用"nitifications"让client建立连接和server的连接.oma协议定义了几个通知的纽带.定义的纽带和通知内容可以在[DMNOTI]手册中找到.
 
+###Package 1: Initialization from client to server
+
+client发送激发包的目的是:
+* 向server发送设备信息,client一定在管理会话的第一条消息中发送设备信息.
+* 根据section9的规则,server识别client.
+* 通知server管理会话有谁激发,server(在Package 0 中发送trigger)还是client(如最终用户选择一个菜单选项)
+* 通知任意client的server产生alert,如Generic Alert或者Client Event[REPPRO]
+
+client到server产生的包(Package 1)的具体要求如下:
+
+1. SyncHdr元素的要求
+
+* VerDTD元素的值为1.2
+* VERProto元素的值为DM/1.2
+* SessionID包含会话的ID.如果client回复alert code SERVER-INITIATED MGMT (1200)通知,SessionID和通知中的一致.否则client要产生不重复的SessionID.同样的SessionID要应用与整个对话中.
+* MsgID识别server到client的会话消息
+* Target识别目标server
+* Source识别源设备
+* Cred在client到server的认证消息中.
+
+2. Alert在SyncBody中,不论是client还是server激发的管理会话.
+
+* CmdID是必须的
+* Data元素承载管理会话的类型SERVER-INITIATED MGMT (1200)或者CLIENT-INITIATED MGMT (1201).
+
+3. 用SyncBody里的Replace命令发送设备信息.Replace命令的要求如下:
+
+* CmdID必须有
+* 设备信息树的每个节点创立一个Item元素.可能的节点定义在[DMSTDOBJ]
+* Item中的Source元素要有节点URI的值.
+* Data元素承载设备信息数据.
+
+4. client可能包含client-generated Alarts 如Client Event [REPPRO] or Generic Alert.
+
+Final元素用于SyncBody中,表示包中的最后一个消息.
+
+###Package 2: Initialization from server to client
+
+server发送的激发包的目的是:
+* server识别client,根据Section9
+* server可以发送用户交互命令
+* 发送管理数据和命令
+* 如果接受到了来自client的Client Initiated Alerts,则发送其状态
+
+Package2可以关闭管理会话用只包含<Final>元素(任何管理命令,用户交互命令,client认证将持续会话).同时在特殊情况下,server可以发送Session Abort Alert (1223)强制关闭会话.
+
+package2的细节要求:
+
+1. SyncHdr里的元素的要求:
+
+* VerDTD值为1.2
+* VerProt值为DM/1.2
+* SessioID包括表示管理会话的ID
+* MsgID识别属于server到client的管理会话的消息
+* Target识别目标设备
+* Source识别源设备
+
+2. 接收到client发来的SyncHdr和Alerts,sever在SyncBody里回复Status.
+
+3. 任何管理操作包括在SyncML文档中(如Alert,Sequence,Replace)的user interaction,被放置到SyncBody中.
+
+* CmdID是必须的
+* 如果URI需要进一步确定源数据集,Source是必须的
+* 如果URI需要进一步确定目标数据集,Target是必须的
+* 除非命令不需要Data元素,否则Item里的Data元素用来包括数据自身.
+* 操作或者Item里的Meta元素必须使用,当Type或者Format不是默认的值[META].
+
+4. Final元素用于SyncBody中,表示包中的最后一个消息.
+
+###Package 3: Client response sent to server
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
