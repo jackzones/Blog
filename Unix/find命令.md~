@@ -22,42 +22,42 @@
 
 1. 在当前目录及子目录中查找文件名以两个小写字母开头,跟着是两个数字开头,最后是txt类型的文件.
 
-`find . -name "[a-z][a-z][0-9][0-9]*.txt" -print`
+	`find . -name "[a-z][a-z][0-9][0-9]*.txt" -print`
 
 2. 想要在/etc目录中查找文件名以host开头的文件,可以用:
 
-`find /etc -name "host*" -print`
+	`find /etc -name "host*" -print`
 
-#####按照更改时间,mtime
+#####-mtime,按照更改时间,
 
 1. 在系统根目录下查找更改时间在5日以内的文件
 
-`find / -mtime -5 -print`
+	`find / -mtime -5 -print`
 
 2. 为了在/var/adm目录下查找更改时间在3日以前的文件
 
-`find /var/adm -mtime +3 -print`
+	`find /var/adm -mtime +3 -print`
 
 #####-type
 
 1. 在/etc目录下查找所有的目录
 
-`find /etc -type d -print`
+	`find /etc -type d -print`
 
 2. 在当前目录下查找除目录以外的所有类型的文件
 
-`find . ! -type d -print`
+	`find . ! -type d -print`
 
 
 ####xargs执行shell命令
 
 1. 用grep命令在当前目录下的所有普通文件中搜索DBO这个词
 
-`find . -name "*" -type f -print | xargs grep "DBO"` 
+	`find . -name "*" -type f -print | xargs grep "DBO"` 
 
 2. 查找系统中的每一个普通文件,然后使用xargs命令来测试它们分别属于哪类文件
 
-`find / -type f -print | xargs file`
+	`find / -type f -print | xargs file`
 
 
 
