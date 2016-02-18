@@ -1,4 +1,4 @@
-###Agent使用方法
+###1+1Agent使用方法
 ####Agent位置
 * 通过OMU跳入测试工具板中,30.64中`/root/nelson_agent_oma`
 * 本机`/home/amy/Documents/simulator/OMA_Agent_AB`
@@ -28,7 +28,7 @@
 	- LastProvisioningTime(上次预配置时间)
 	- Register下的Status:`value='1'`只做一次预配置,`value='0'`inform每次都预配置
 	- AAuthName:order中的`devid`
-	- AAuthData:`value='./conf/0_AAuthData_1562603763'`**确保存在次文件,否则新建此文件,touch conf/0_AAuthData_1562603763**
+	- AAuthData:`value='./conf/0_AAuthData_1562603763'`**确保存在此文件,否则新建此文件,touch conf/0_AAuthData_1562603763**
 	- AAuthSecrect:order中的`password`	
 
 ####运行agent:
@@ -36,7 +36,7 @@
 `./oma -d conf/`
 
 ####order文件举例
-```
+```xml
 <?xml  version="1.0"  encoding="utf-8"?>
 <order  orderKey="add111000000000211">  
     <ADD_HSUB>  
