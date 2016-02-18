@@ -182,6 +182,8 @@ client或者server激发Management Alert之后,client需要发送一条Generic A
 
 client可能发送多个有Generic Alert的Alert消息或者具有一个或多个Generic Alert的Alert消息里的多个Items捆绑一起.
 generic alert消息里的Data在协议里没有具体说明,协议确定client如何通知server Type和Format是什么.server一定要支持Generic Alert Format但不是多有alert data的Types.   
+
+
 如果server不支持的Type和Format,server要响应415'"Unsupported media type or Format"   
 如果设备不支持Large Object,Alert消息一定不能超过message size.   
 此手册只是说明协议的一方面,一些注册的Generic Alert对于不同的Generric Alert Data可能还有更多的要求.    
@@ -231,6 +233,8 @@ Reversed-Domain-Name: org.domain.samplealert
 	可选.定义message的重要程度.可以接受的:fatal,critical,minor,warning,informational,harmless,indeterminate.默认级别informational,省略mark.
 * Data(Item里的)
 	必须指定.必须用Meta标签里的Format和Type
+* Correlator
+	可选,alertexec命令异步响应时使用.
 
 
 
