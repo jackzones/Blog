@@ -216,34 +216,24 @@ Reversed-Domain-Name: org.domain.samplealert
 ```
 
 * CmdID
-
 	所有的命令必须以同样的方式指定.
 * Data
-
 	Generic Alert的值必须是1226
 * Item
-
 	这是必须的参数.对于每个类型的Generic Alert,如果设备在一个Alert消息中发送他们,Item必须重复发送.
 * Source里的LocURI
-
 	这是可选参数.如果Alert由Management Object产生或者Management Object的定义指定了这个参数,就必须包括此参数
 * Meta
-
 	Meta元素必须指定Alert Data中的Type和Format.
 * Type
-
 	Type元素一定要指定,并且明确内容消息的媒体类型.元素类型的内容消息一定是URN.如果是MIME-type,就必须用"content-type"作为命名空间标识符并且内容应该是注册的MIMEcontent-type.如果是reverse domain name则命名空间标识符"Reversed-Domain-Name"必须定义.只有这两个命名空间标识符允许.
 * Format
-
 	必须指定,必须包含接下来的Data元素的Format的SyncML标识.
 * Mark
-
 	可选.定义message的重要程度.可以接受的:fatal,critical,minor,warning,informational,harmless,indeterminate.默认级别informational,省略mark.
 * Data(Item里的)
-
 	必须指定.必须用Meta标签里的Format和Type
 * Correlator
-
 	可选,alertexec命令异步响应时使用.
 
 
