@@ -236,11 +236,115 @@ Reversed-Domain-Name: org.domain.samplealert
 * Correlator
 	可选,alertexec命令异步响应时使用.
 
+###Authentication
+
+这节定义了认证规则。   
+
+server和client都会检测对方是否在最初的请求中没有证书，或者认证太薄弱。   
+如果server在Package2中没有发送证书或发送无效的证书，没有认证，没有命令，client一定不能不能通过只响应Status认证server。如果server在Pkg2中查client的口令，client一定重新发送pkg1，必须重新发送带有server认证请求的Alert和DevInfo。   
+
+较好的server到client的认证类型要在DM Account management object中的<X>/AAuthPref 参数。    
+
+请求的响应代码是401或407，请求需要认证。此情况下，响应的Status命令一定包含Chal元素，Chal包含对请求资源的认证许可。发起人嘘嘘重复发送带有Cred元素的请求。如果请求已经包含Cred元素，401响应把表示，证书的认证被拒绝。   
+
+212响应（Authentication accepted），不需要在验证了。
+
+###Authorization 授权 认证
+
+Cred元素要包含在请求中，在接收到401和407响应时，如果请求重复。    
+
+应用层的认证通过用SyncHdr里的Cred和SyncHdr的Status命令。
+
+###Authorization Examples
+
+####Basic authentication with a challenge
+
+此例中，SyncBody没有显示，但是实际是有的。
+
+* client尝试没有任何认证与server建立连接（pkd1）。!Cred
+* （pkg2）server查看client应用层的认证。407
+* client一定重新发送有认证的pkg1。Cred
+* server接受认证，会话认证（pkg2）212
 
 
+Pkg1 from Client
+```xml
+<SyncML xmlns='SYNCML:SYNCML1.2'>
+<SyncHdr>
+<VerDTD>1.2</VerDTD>
+<VerProto>DM/1.2</VerProto>
+<SessionID>1</SessionID>
+<MsgID>1</MsgID>
+<Target><LocURI>http://www.syncml.org/mgmt-server</LocURI></Target>
+<Source><LocURI>IMEI:493005100592800</LocURI></Source>
+</SyncHdr>
+<SyncBody>
+...
+</SyncBody>
+</SyncML>
+```
+###MD5 digest access authentication with a challenge
 
+* client尝试没有任何认证与server建立连接（pkd1）。!Cred
+* （pkg2）server查看client应用层的认证。407
+* client一定重新发送有MD5认证的pkg1,Type为syncml:auth-md5。Cred
+* server接受认证，会话认证（pkg2）212。同时server给client发送下一个nonce，client在下一个sesstion中必须使用。
 
+###User interaction commands
 
+协议使用user interactin来notify和obtain confirmation。   
+
+Alerts只能server to client。
+	- 如果client不支持，响应406 'Optional Feature Not Supported'。
+	- 如果client发送，server忽略。
+
+Pkg2中发送，Pkg3中响应Status。如果Pkg4还在继续，Pkg4可以只包含user interaction Alerts。    
+
+Alert包含2或者更多的元素。client一定要保存Item元素的顺序。client在消息中也要按照相同的顺序处理。    
+
+User interaction，除了display，应该有取消的选项。如果user决定取消操作，那么management message进程就停止。Status代码响应215（Not executed）。处理万user的响应，server要继续其他management操作。<br/>
+
+如果UI让user取消，status 214 Operation cancelled应该返回。
+
+####display
+
+Alert有两个Item：
+* 第一个Item，section10中说明
+* 第二个Item， 只有一个Data，为显示给用户的文本内容
+
+```xml
+<Alert>
+<CmdID>2</CmdID>
+<Data>1100</Data>
+<Item><Data>MINDT=10</Data></Item>
+<Item>
+<Data>Management in progress</Data>
+</Item>
+</Alert>
+```
+
+####Confirmation
+
+确认是二元选择：用户同意或者不同意。CONFIRM_OR_REJECT 新的Alert代码。当client接收到这个Alert，显示Alert内容，让user选择‘Yes’or‘no’。
+
+	* 如果回答是‘yes’，响应status是200: “Yes”，包处理继续。
+	* 如果回答是“No”，响应status是304: “No”，包处理停止
+	* 如果UI允许user取消，响应214: “Operation cancelled”
+
+如果响应是“No”，包处理根据confirmation Alert的placement而改变。
+
+	- 如果confirmation Alert在Atomic里，Atomic失败，执行命令回滚
+	- 如果confirmation Alert在Aequence里，sequence里在confirmation Alert之后的命令忽略。
+	- 如果confirmation Alert不再以上两种，如在SyncBody中，user 的回复不影响包进程。
+
+命令忽略，响应status 215 Not Exected
+
+Alert包含两个Items：
+
+	- 第一个Item包含的可选参数定义在section10中
+	- 第二个Item只有一个Data元素，显示用户信息。
+
+####User input
 
 
 
