@@ -345,8 +345,102 @@ Alert包含两个Items：
 	- 第二个Item只有一个Data元素，显示用户信息。
 
 ####User input
+当Alert发送，client显示用户在文本框中输入的内容。the text string 然后发回给server在Status中。server指示client执行用户交互，通过发送TEXT INPUT的Alert。Alert包含至少两个Items：
 
+- 第一个Item包含定义在section10.3中的可选参数。
+- diergeItem只有一个Data元素，包含需要向user展示的文本。
 
+例如：
+```xml
+<Alert>
+<CmdID>2</CmdID>
+<Data>1102</Data>
+<Item></Item>
+<Item>
+<Data>Type in the name of the service you would like to
+configure</Data>
+</Item>
+</Alert>
+```
+
+下面的Status消息从client到server的下一个消息发回。
+
+```xml
+<Status>
+<MsgRef>1</MsgRef>
+<CmdRef>2</CmdRef>
+<Cmd>Alert</Cmd>
+<Data>200</Data> <!-- Successful, user typed in a text -->
+<Item>
+<Data>CNN</Data> <!-- User input -->
+</Item>
+</Status>
+```
+####User choice
+
+当Alert发送，user看到一系列可能的选择。Alert body要半酣一下Item：
+
+- 第一个Item包含可选参数。定义于section10中。
+- 第二个Item之后一个Data元素，包含内容的标题。
+- 第三个Item包含一个Data，描述一个可能的选择。这些Item从1开始，Item一定要他们发送的顺序排序。Item应该以他们发送的顺序发送给user。
+
+用户的选择在Status中返回选择的item在Item中返回。这个Item的Data元素包含item的索引。Alert允许用户选择多个item。这种情况下，item在多个items中发回。
+
+一个可能的应用是一个表，每个Data可以成列显示列表。
+用户可以选择一系列item，用户点击“ok”按钮选择的表item的Id在Status消息中发回。
+
+####Progress notification（object download）
+
+用户应该能跟踪长管理行为的进展，如文件和对象的下载。
+
+根据协议，Item可以被Size标记，表明对象的大小。当设备接受到Item里的size，会在用户界面显示notification的进展，如果设备认为给定size的item需要长时间下载。
+
+notification的进展根据信息长度的比例发配。如果信息的大小不是server发送的，client不能显示按比例发配的进程，所以认为client下载的这个信息太大了。
+
+反病毒数据文件，有Size Meta的下载：
+```xml
+<Add>
+<CmdID>2</CmdID>
+<Meta>
+<Format xmlns="syncml:metinf">b64</Format>
+<Type xmlns="syncml:metinf">
+application/antivirus-inc.virusdef
+</Type>
+</Meta>
+<Item>
+<Meta>
+<!-- Size of the data item to download -->
+<Size xmlns='syncml:metinf'>37214</Size>
+</Meta>
+<Target><LocURI>./antivirus_data</LocURI></Target>
+<Data>
+<!-- Base64-coded antivirus file -->
+</Data>
+</Item>
+</Add>
+```
+####User interaction options
+
+Alert的可选User interaction parameters在第一个Item中。
+可选参数在Data元素中，以文本串形式。如果User interaction Alert没有可选参数，第一个Item为空。可选参数字符串遵从URL代码格式，具体[RFC2396]。
+
+client必须跳过不能处理的有错误的消息。
+下面定义了可选参数：
+
+- MINDT（Minimum Display Time）
+	这个参数显示用户交互应该给用户显示的最小时间。要确保notification message可读。
+
+- MAXDT （Maximum Display Time）
+	参数表示等待用户执行user interaction的时长。如果用户在这个时间内没有执行，这个action应该取消，timeout Stutas或者moren回复包发回给server。
+MAXDT参数一定是正整数。
+
+- DR（Default Response）
+
+DR表示用户交互控制界面的其实状态。除了设置用户交互控制界面的其实状态，DR对user interaction control widget没有其他影响。不同的user interaction type如下：
+
+- 如果ui（users interaction）是Notification，可选参数省略。
+- 如果ui是确认信息，0代表拒绝，并且高亮，1代表接受，并且高亮。高亮ui表示默认ui将会选择的元素（例如按下回车）。如果client没有高领，这个参数也许被忽略了。
+- 如果ui是user input，DR
 
 
 
