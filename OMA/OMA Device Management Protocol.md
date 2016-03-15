@@ -1,13 +1,16 @@
 ##翻译
 
 ###Multiple Messages In Package
+
+用多个message发送一个SyncML package，当package太大，不能在一个message中发送。
+
 对于封装边界,server处于以下的一种状态中:
 
-1. server发送了一个完整的包.在这种状态下,server等待来自client发送的状态.由于状态和结果可能很大,如Get命令的结果,在结束回复之前,client可能发送多个消息给server.
+1. server发送了一个完整的包.在这种状态下,server等待client响应的状态.由于此状态和结果可能很大,如Get命令的结果,在结束响应之前,client可能给server发送多个消息.
 
 2. server接受到一个client发送的完整回复包.在这种状态下,server可能给client发送新的命令.
 
-3. server发送一个或者多个消息,此消息为一个包的一部分,但是还没有发送当前包的最终消息.当server正在发送一个大的对象,并且当这个对象的最后一段发送了,这个包才会停止时,这种状态才有效.
+3. server发送一个或者多个消息,此消息为一个包的一部分,但是还没有发送当前包的结束消息.例如，当server正在发送一个大的对象,并且当这个对象的最后一段发送了,这个包才会停止时。
 
 ###Requirements
 * 如果SyncML包以多个SyncML消息发送是,此包最后一个消息一定要包含Final元素.其他属于此包的消息一定不能包含Final元素.
