@@ -438,10 +438,188 @@ MAXDT参数一定是正整数。
 
 DR表示用户交互控制界面的其实状态。除了设置用户交互控制界面的其实状态，DR对user interaction control widget没有其他影响。不同的user interaction type如下：
 
-- 如果ui（users interaction）是Notification，可选参数省略。
-- 如果ui是确认信息，0代表拒绝，并且高亮，1代表接受，并且高亮。高亮ui表示默认ui将会选择的元素（例如按下回车）。如果client没有高领，这个参数可以被忽略。
+	- 如果ui（users interaction）是Notification，可选参数省略。
+	- 如果ui是确认信息，0代表拒绝，并且高亮，1代表接受，并且高亮。高亮ui表示默认ui将会选择的元素（例如按下回车）。如果client没有高领，这个参数也许被忽略了。
+	- 如果ui是user input，DR
 
+- MAXLEN(Maximum length of user input)
 
+MAXLEN为正值，定义用户输入的最大字符数。如果定义的输入最大值超过了客户端的容量，client会忽略这个参数。
+
+- IT（Input Type）
+
+IT定义了在user interaction weidget中可以输入的字符种类。
+
+	- IT=A :Alphanumeric input，client允许输入所有文字和数字的字符。默认
+	- IT=N :Numeric input， client允许输入所有数字字符，小数和符号字符。
+	- IT=D :Date input， client允许所有数字字符。输入以如下形式“DDMMYYYY”
+	- IT=T :Time input， 允许所有数字字符，用户输入以“hhmmss”形式发送给server
+	- IT=P :Phone number input,client允许所有数字字符，'+','p','w','s'.'+'必须在第一位，如果是电话号码的话。
+	- IT=I :IP address input,client所有数字。如下形式'xxx.yyy.zzz.www'
+
+Example:
+
+```xml
+<!-- Numeric text input -->
+<Item><Data>IT=N</Data></Item>
+```
+
+Status message delivered to server as response
+
+```xml
+<Status>
+<MsgRef>1</MsgRef>
+<CmdRef>2</CmdRef>
+<Cmd>Alert</Cmd>
+<Data>200</Data> <!-- Successful, entered a number -->
+<Item>
+<Data>-1.23</Data>
+</Item>
+</Status>
+```
+
+- ET(Echo Type)
+
+ET代表文本输入如何通过user interaction widget输出。允许的之如下：
+
+	- ET=T :Text input. clietnt允许用户查看用户通过user interaction widget 输入的字符。默认模式。
+	- ET=P :Password input.client要隐藏用户通过user interaction widget输入的字符。即用星号代替字符。
+Example:
+```
+<!-- Numeric text input -->
+<Item><Data>ET=T</Data></Item>
+```
+
+####Protocol examples
+
+这节介绍几个协议脚本（scenarios）
+
+- Package 1: Initialization from client to server
+
+```xml
+<SyncML xmlns='SYNCML:SYNCML1.2'>
+<SyncHdr>
+<VerDTD>1.2</VerDTD>
+<VerProto>DM/1.2</VerProto>
+<SessionID>1</SessionID>
+<MsgID>1</MsgID>
+<Target>
+<LocURI>http://www.syncml.org/mgmt-server</LocURI>
+</Target>
+<Source>
+<LocURI>IMEI:493005100592800</LocURI>
+</Source>
+<Cred> <!-- Client credentials are mandatory if the transport layer is
+not providing authentication.-->
+<Meta>
+<Type xmlns="syncml:metinf">syncml:auth-basic</Type>
+<Format xmlns='syncml:metinf'>b64</Format>
+</Meta>
+<Data>
+<!-- base64 formatting of userid:password -->
+</Data>
+</Cred>
+<Meta> <!-- Maximum message size for the client -->
+<MaxMsgSize xmlns="syncml:metinf">5000</MaxMsgSize>
+</Meta>
+</SyncHdr>
+<SyncBody>
+<Alert>
+<CmdID>1</CmdID>
+<Data>1200</Data> <!-- Server-initiated session -->
+</Alert>
+<Replace>
+<CmdID>3</CmdID>
+<Item>
+<Source><LocURI>./DevInfo/DevId</LocURI></Source>
+<Meta>
+<Format xmlns='syncml:metinf'>chr</Format>
+<Type xmlns='syncml:metinf'>text/plain</Type>
+</Meta>
+<Data>IMEI:493005100592800</Data>
+</Item>
+<Item>
+<Source><LocURI>./DevInfo/Man</LocURI></Source>
+<Meta>
+<Format xmlns='syncml:metinf'>chr</Format>
+<Type xmlns='syncml:metinf'>text/plain</Type>
+</Meta>
+<Data>Device Factory, Inc.</Data>
+</Item>
+<Item>
+<Source><LocURI>./DevInfo/Mod</LocURI></Source>
+<Meta>
+<Format xmlns='syncml:metinf'>chr</Format>
+<Type xmlns='syncml:metinf'>text/plain</Type>
+</Meta>
+<Data>SmartPhone2000</Data>
+</Item>
+<Item>
+<Source><LocURI>./DevInfo/DmV</LocURI></Source>
+<Meta>
+<Format xmlns='syncml:metinf'>chr</Format>
+<Type xmlns='syncml:metinf'>text/plain</Type>
+</Meta>
+<Data>1.0.0.1</Data>
+</Item>
+<Item>
+<Source><LocURI>./DevInfo/Lang</LocURI></Source>
+<Meta>
+<Format xmlns='syncml:metinf'>chr</Format>
+<Type xmlns='syncml:metinf'>text/plain</Type>
+</Meta>
+<Data>en-US</Data>
+</Item>
+</Replace>
+<Final/>
+</SyncBody>
+</SyncML>
+```
+
+- Package 2: Initialization from server to client
+
+```xml
+<SyncML xmlns='SYNCML:SYNCML1.2'>
+<SyncHdr>
+<VerDTD>1.2</VerDTD>
+<VerProto>DM/1.2</VerProto>
+<SessionID>1</SessionID>
+<MsgID>1</MsgID>
+<Target>
+<LocURI>IMEI:493005100592800</LocURI>
+</Target>
+<Source>
+<LocURI>http://www.syncml.org/mgmt-server</LocURI>
+</Source>
+<Cred> <!-- Server credentials -->
+<Meta>
+<Type xmlns="syncml:metinf">syncml:auth-basic</Type>
+<Format xmlns='syncml:metinf'>b64</Format>
+</Meta>
+<SyncML xmlns='SYNCML:SYNCML1.2'>
+<SyncHdr>
+<VerDTD>1.2</VerDTD>
+<VerProto>DM/1.2</VerProto>
+<SessionID>1</SessionID>
+<MsgID>1</MsgID>
+<Target>
+<LocURI>IMEI:493005100592800</LocURI>
+</Target>
+<Source>
+<LocURI>http://www.syncml.org/mgmt-server</LocURI>
+</Source>
+<Cred> <!-- Server credentials -->
+<Meta>
+<Type xmlns="syncml:metinf">syncml:auth-basic</Type>
+<Format xmlns='syncml:metinf'>b64</Format>
+</Meta>
+</Item>
+</Replace>
+</Sequence>
+<Final/>
+</SyncBody>
+</SyncML>
+```
 
 
 

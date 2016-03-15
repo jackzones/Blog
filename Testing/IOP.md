@@ -6,7 +6,7 @@
 - 在/中解压，IOP
 - `cd IOP `   <tab> `./install.sh`
 - `cd bin` <tab> `./start.sh`
-- 可以进入系统，激活license
+- 进入系统，激活license
 
 #####Agent连接系统
 
