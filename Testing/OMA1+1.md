@@ -1,14 +1,13 @@
 ###1+1Agent使用方法
 ####Agent位置
-* 通过OMU跳入测试工具板中,30.64中`/root/nelson_agent_oma`
+* 通过OMU`ssh root@0.0.0.0 -p 8031`跳入测试工具板中,30.64中`/root/nelson_agent_oma`
 * 本机`/home/amy/Documents/simulator/OMA_Agent_AB`,*本机无法连入其内网，只能用作自己实验使用*。
 
 ####配置agent之前的准备:
 * 系统中导入order.xml文件
 * 查找系统`sbi的虚拟ip`
 
-		方法:进入系统,`ssh root@0.0.0.0 -p 8031`,
-		`vi /OneMS_OMA/conf/general.properties`,查看南向监听ip
+*方法:进入所在系统，`vi /OneMS_OMA/conf/general.properties`,查看南向监听ip*
 
 
 ####配置agent:
