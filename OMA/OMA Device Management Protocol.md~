@@ -711,6 +711,7 @@ The difference between basic authentication is `syncml:auth-md5` with `Chal` tag
 
 - Add
 
+Add creates a new node.
 
 ```xml
 <Add>

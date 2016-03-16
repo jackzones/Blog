@@ -711,6 +711,7 @@ The difference between basic authentication is `syncml:auth-md5` with `Chal` tag
 
 - Add
 
+Add creates a new node.
 
 ```xml
 <Add>
@@ -862,12 +863,14 @@ One or more `Add`, `Replace`, `Delete`, `Copy`, `Get`, `Exec` or `Alert` element
 
 #####User interaction alert codes
 
-- 1110:DISPLAY
-- 1101:CONFIRM OR REJECT
-- 1102:TEXT INPUT
-- 1103:SINGLE CHOICE
-- 1104:MULTIPLE CHOICE
-- 1105-1109 Reversed for future SyncML usage
+```
+1110:DISPLAY
+1101:CONFIRM OR REJECT
+1102:TEXT INPUT
+1103:SINGLE CHOICE
+1104:MULTIPLE CHOICE
+1105-1109 Reversed for future SyncML usage
+```
 
 #####Device management session alert codes
 
