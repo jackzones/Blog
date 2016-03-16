@@ -892,6 +892,9 @@ One or more `Add`, `Replace`, `Delete`, `Copy`, `Get`, `Exec` or `Alert` element
 ```
 
 
+####20100525C-V1.3-Repre
+
+The DM Message, as specified before, is an individual XML document. The document consists of a header, specified by the SyncHdr element type, and a body, specified by the SyncBody element type. The DM representation header specifies routing and versioning information about the DM Message. The DM representation body is a container for one or more DM Commands. The DM Commands are specified by individual element types. The DM Commands act as containers for other element types that describe the specifics of the DM command, including any data or meta-information.
 
 
 
