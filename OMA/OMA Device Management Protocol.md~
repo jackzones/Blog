@@ -744,13 +744,145 @@ The Alert command is specifically used to convey notifications,for example,a mob
 </Alert>
 ```
 
+- Atomic
 
+	- `Nested Atomic commands` and `Get` commands are **not legal**. A nested Atomic command or Get command will generate an error `(500) Command failed`.
+	- The remainder of the command consists of one or more `Add`, `Alert`, `Delete`, `Copy`, or `Replace` commands that are the scope of the Atomic functionality.
 
+```xml
+<Atomic>
+<CmdID>42</CmdID>
+<Alert>
+<!—User confirmation -->
+</Alert>
+<Replace>
+... blah, blah ...
+</Replace>
+</Atomic>
+```
 
+- Copy
 
+It is intended to provide a facility for duplicating or moving data (as can be obtained by using Copy followed by a Delete of the original) on the client without having to send this data to a server and back to achieve the same effect.
 
+- Delete
 
+The purpose of the `Delete` command is to delete nodes. To delete node values, use the `Replace` command.
+The `Delete` command deletes a node, and the entire sub-tree beneath that node if one exists.
 
+The following rules apply when deleting nodes that has child nodes:
+	- If all the child nodes along with the target node can be deleted, a "complete delete" was achieved, and the `(200) OK status` is returned to indicate this.
+	- Permanent nodes cannot be deleted. If attempt to delete a permanent node is made, `(405) Command not allowed status` is returned.
+	- The root node (.) cannot be deleted. Attempts to do so always return the `(405) Command not allowed status`.
+
+The `Target` specified within the Item element type MUST be a full device URI.
+```xml
+<Delete>
+<CmdID>5</CmdID>
+<Item>
+<Target>./DM/WAPSetting/1</Target>
+</Item>
+</Delete>
+```
+
+- Exec *Do not understand*
+
+Exec MUST be specified within a Sequence or SyncBody element type and the Target specified within the Item element type in the Exec command MUST be a full device URI.
+
+- Get
+
+```xml
+<Get>
+<CmdID>4</CmdID>
+<Item>
+<Target>
+<LocURI>./antivirus_data/version</LocURI>
+</Target>
+</Item>
+</Get>
+```
+
+- Replace
+
+The Replace command is used to overwrite the value of an existing node.
+If the node does not exist, it MUST NOT be created and `status code 404` is returned
+
+```xml
+<Replace>
+<CmdID>4</CmdID>
+<Item>
+<Target>
+<LocURI>./antivirus_data/version</LocURI>
+</Target>
+<Data>antivirus-inc/20020213a/1</Data>
+</Item>
+</Replace>
+```
+
+- Result
+
+Results to a command MUST be sent after the Status to the same command.
+
+```xml
+<Results>
+<MsgRef>1</MsgRef><CmdRef>4</CmdRef>
+<CmdID>3</CmdID>
+<Item>
+<Source>
+<LocURI>./antivirus_data/version</LocURI>
+</Source>
+<Data>antivirus-inc/20010522b/5</Data>
+</Item>
+</Results>
+```
+
+- Sequence
+
+One or more `Add`, `Replace`, `Delete`, `Copy`, `Get`, `Exec` or `Alert` element types MUST be specified. These element types MUST be processed in the specified sequence.
+
+```xml
+<Sequence>
+<CmdID>1234</CmdID>
+<Add>
+<CmdID>1235</CmdID>
+...blah, blah...
+</Add>
+<Add>
+<CmdID>1236</CmdID>
+...blah, blah...
+</Add>
+<Delete>
+<CmdID>1237</CmdID>
+...blah, blah...
+</Delete>
+</Sequence>
+```
+
+####Alert Codes
+
+#####User interaction alert codes
+
+- 1110:DISPLAY
+- 1101:CONFIRM OR REJECT
+- 1102:TEXT INPUT
+- 1103:SINGLE CHOICE
+- 1104:MULTIPLE CHOICE
+- 1105-1109 Reversed for future SyncML usage
+
+#####Device management session alert codes
+
+- 1200:SERVER-INITIATED MGMT
+- 1201:CLIENT-INITIATED MGMT
+- 1202-1220:Reversed for future SyncML usage
+
+#####Special device management alert codes
+
+- 1222:NEXT MESSAGE
+- 1223:SESSION ABORT
+- 1224:CLIENT EVENT
+- 1225:NO END OF DATA
+- 1226:GENERIC ALERT
+- 1227-1229 Reversed for future SyncML usage
 
 
 
