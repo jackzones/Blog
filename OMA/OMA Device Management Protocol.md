@@ -874,19 +874,22 @@ One or more `Add`, `Replace`, `Delete`, `Copy`, `Get`, `Exec` or `Alert` element
 
 #####Device management session alert codes
 
-- 1200:SERVER-INITIATED MGMT
-- 1201:CLIENT-INITIATED MGMT
-- 1202-1220:Reversed for future SyncML usage
+```
+1200:SERVER-INITIATED MGMT
+1201:CLIENT-INITIATED MGMT
+1202-1220:Reversed for future SyncML usage
+```
 
 #####Special device management alert codes
 
-- 1222:NEXT MESSAGE
-- 1223:SESSION ABORT
-- 1224:CLIENT EVENT
-- 1225:NO END OF DATA
-- 1226:GENERIC ALERT
-- 1227-1229 Reversed for future SyncML usage
-
+```
+1222:NEXT MESSAGE
+1223:SESSION ABORT
+1224:CLIENT EVENT
+1225:NO END OF DATA
+1226:GENERIC ALERT
+1227-1229 Reversed for future SyncML usage
+```
 
 
 
