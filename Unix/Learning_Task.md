@@ -7,6 +7,7 @@
 - ip ru show
 - ftp 
 - tcpdump
+- [rpm]()
 
 #####Server
 
