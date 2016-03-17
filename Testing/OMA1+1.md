@@ -22,7 +22,7 @@
 	- PollingInterval(心跳间隔)
 	- PollingSupported(是否开启心跳):`value='1'`开启
 	- PollingAttempts(发送次数):`value='-1'`无限次
-	- DEVID(设备ID):order中的`devid`
+	- DevID(设备ID):order中的`devid`
 	- FwV(设备版本)
 	- DevType(设备类型)
 	- LastProvisioningTime(上次预配置时间)
@@ -34,6 +34,11 @@
 ####运行agent:
 
 `./oma -d conf/`
+
+####抓包
+
+在omu上抓主机为164.135.30.111（南向监听端口）的包。
+`tcpdump -s0 -i eth8 host 164.135.30.111 -w ccc.pcap`
 
 ####order文件举例
 ```xml
