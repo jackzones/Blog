@@ -40,6 +40,10 @@
 在omu上抓主机为164.135.30.111（南向监听端口）的包。
 `tcpdump -s0 -i eth8 host 164.135.30.111 -w ccc.pcap`
 
+####文件导出本地scp（port）
+
+`scp -P 8031 root@0.0.0.0:/0/0 /` 
+
 ####order文件举例
 ```xml
 <?xml  version="1.0"  encoding="utf-8"?>
