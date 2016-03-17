@@ -1,0 +1,6 @@
+###OMA系统使用
+#####查看mapping
+*order中的字段相对应的URI*
+/OneMS_OMA/conf/data/omanbimapping/nbiParametersMapping.xml
+
+
