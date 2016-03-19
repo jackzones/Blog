@@ -1,6 +1,6 @@
-####git简介
+####[git简介](http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/00137586810169600f39e17409a4358b1ac0d3621356287000)
 
-#####enviroment
+#####local enviroment
 
 - git config --global user.name "jackzones"
 - git config --global user.email "jackzones1991@gmail.com"
@@ -18,6 +18,8 @@
 #####status
 
 find which file modified and the branch
+
+
 `git status`
 
 #####verify the difference
@@ -25,6 +27,8 @@ find which file modified and the branch
 see the modified content
 
 `git diff filename`
+
+
 result:
 ```
 diff --git a/readme.txt b/readme.txt
