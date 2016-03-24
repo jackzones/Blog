@@ -16,6 +16,13 @@
 *scripting language is interpreted*
 * Scripting language 用于更高层,处理文件方面
 * Scripting language 效率低于compiled language
+
+###Shell的定义
+`shell`最简单的定义就是----`命令解释器`( Command Interpreter)
+
+- 将使用者的命令翻译给`kernel`来处理；
+- 同时，将`kernel`的处理结果翻译给使用者。
+
 ### Shell开发周期
 1. 直接在命令行(command line)上测试
 2. 放入独立的脚本
