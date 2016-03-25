@@ -1,5 +1,14 @@
 ######撤销上一步操作
 `u`
+######show the line number and close
+`:set number` or`:set nu` and `:set nonumber` or `:set nonu`
+######show the current director
+`:!pwd`
+
+#####sort
+
+######reserve the line 
+`:g/^/m0`
 
 #####光标操作
 
@@ -61,3 +70,9 @@
 `:%s/vivian/sky/`or `:g/vivian/s//sky/）`
 ######替换每一行中所有vivian为sky
 `:%s/vivian/sky/g`or `:g/vivian/s//sky/g`
+######以空替换，即为删除
+
+- 删除行首的"
+    `:%s/"^//g`
+- 删除行尾的'
+    `:%/'$//g`
