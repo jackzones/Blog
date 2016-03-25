@@ -6,40 +6,49 @@
 
 ###Run the shell scipt 
 `test.sh`
+
 ```shell
 #!/bin/bash
 echo 'Hello World!'
 ```
 
 - as executable program
+
 ```shell
 chmod +x ./test.sh #the executable authority
 ./test.sh           #execute the script
 ```
+
 `./`means looking for the scrpt in the current directory.
 
 - as interpreter's argument
+
 ```shell
 /bin/sh test.sh
 /bin/php test.sh 
 ```
+
 It's not neccessary for the `#!/bin/bash` in the first line.
 
 - own 
+
 `sh +x test.sh`
 
 ###Variables
 
 - Define the variables
+
 `your_name='nelson'`
 
 **There is no spaces around the =**
 - Use the variables
+
 `echo ${your_name}`
 
 
 ####Readonly variables
 Once define the readonly variables,the value can't be changed.
+
 ```shell
 #!/bin/bash
 your_name='nelson'
@@ -47,6 +56,7 @@ readonly your_name
 ```
 
 ####Delete the variables
+
 `unset variable_name` The readonly variables can not be deleted.
 
 ###String
@@ -64,6 +74,7 @@ readonly your_name
 - 双引号里可以出现转义字符
 
 ####the lengce of the string
+
 ```shell
 string="abcd"
 echo ${#string}
@@ -74,20 +85,24 @@ echo ${#string}
 `array_name=(value0 value1 value2 value3 value4)`
 
 ####fetch the value
+
 `${array_name[num]}`
 `num=@`fetch all the array's value 
 
 ####the length of the array
+
 `length=${#array_name[@]}`or`length=${#array_name[*]}`
 
 ####the length of the element 
+
 `length=${#array_name[n]}`
 
 ###运算符
 
 原生bash不支持简单的数学运算，但是可以通过其他命令来实现，例如 awk 和 expr，expr 最常用。
 
-expr 是一款表达式计算工具，使用它能完成表达式的求值操作。 
+expr 是一款表达式计算工具，使用它能完成表达式的求值操作。
+
 ```shell
 val=`expr 2 + 2`
 echo "${val}"
@@ -101,12 +116,19 @@ echo "${val}"
 ####算术运算符
 加，减，乘，除，取余，赋值，==，!= 
 
+- expr 
+
 注意：条件表达式要放在方括号之间，并且要有空格，例如: [$a==$b] 是错误的，必须写成 [ $a == $b ]
 
 | operator |            specification            |         example         |
 |----------|-------------------------------------|-------------------------|
 | ==       | 用于比较两个数字，相同则返回 true   | [ $a == $b ] 返回 false |
 | !=       | 用于比较两个数字，不相同则返回 true | [ $a != $b ] 返回 true  |
+
+- $(())
+    `r=$(( 4 + 5 ))` 
+- $[]
+    `r=$[ 4 + 5 ]`
 
 ####关系运算符 
 关系运算符只支持数字，不支持字符串，除非字符串的值是数字。假定变量 a 为 10，变量 b 为 20：
@@ -156,22 +178,161 @@ echo "${val}"
 
 文件测试运算符用于检测 Unix 文件的各种属性.[属性检测描述如下](http://www.runoob.com/linux/linux-shell-basic-operators.html)
 
+###流程控制
+shell的流程控制不可为空.
+####if
 
-- file
-- function
-- redirect to 
+```shell
+if condition;then
+    command1
+    command2
+    command3
+fi
+```
+
+写成一行,适用于终端:
+
+`if condition; then command; fi` for example:
+`if [ $(ps -ef | grep -c "ssh") -gt 1 ]; then echo "true"; fi`
+
+####if else
+
+```shell
+if confition; then
+    command1
+    command2
+else
+    command3
+    command4
+fi
+```
+
+####if else-if else
+
+```shell
+if condition1; then
+    command1
+else-if condition2
+    command2
+else 
+    commandN
+fi
+```
 
 
+####for 
+
+```shell
+for var in iterm1 iterm2 iterm3 ...itermN
+do
+    command1
+    command2
+done
+```
+
+`for var in iterm1 iterm2 itermN; do command1; do command2; done;`
+
+####while
+
+```shell
+while condition
+do 
+    command
+done
+```
 
 
+while循环可用于读取键盘信息
 
+```shell
+echo "What's your favorite movies:"
+while read movie
+do 
+    echo "My favorite movie is $movie !"
+done
+```
+####until
 
+直到condition为真,循环停止:
+```shell
+until condition
+do
+    command
+done
+```
 
+####case
 
+```shell
+echo '输入 1 到 4 之间的数字:'
+echo '你输入的数字为:'
+read aNum
+case $aNum in
+    1)  echo '你选择了 1'
+    ;;
+    2)  echo '你选择了 2'
+    ;;
+    3)  echo '你选择了 3'
+    ;;
+    4)  echo '你选择了 4'
+    ;;
+    *)  echo '你没有输入 1 到 4 之间的数字'
+    ;;
+esac
+```
 
+###shell function
 
+```shell
+func_name(){
+    command
+}
+```
+函数返回值在调用该函数后通过`$?`来获得。
 
+注意：所有函数在使用前必须定义。这意味着必须将函数放在脚本开始部分，直至shell解释器首次发现它时，才可以使用。调用函数仅使用其函数名即可.
 
+####function argument
+
+`${n}`represents the n-th argument.
+
+###I/O,Redirect
+
+| commands | specification |
+`n >& m`     `将输出文件 m 和 n 合并`
+`n <& m`     `将输入文件 m 和 n 合并`
+
+####Redirect
+
+```shell
+标准输入文件(stdin): stdin的文件描述符为0，Unix程序默认从stdin读取数据。
+标准输出文件(stdout): stdout的文件描述符为1，Unix程序默认向stdout输出数据。
+标准错误文件(stderr): stderr的文件描述符为2，Unix程序会向stderr流中写入错误信息。
+```
+默认情况下，`command > file`将`stdout`重定向到`file`，`command < file`将`stdin` 重定向到`file`
+
+- 如果希望`stderr`重定向到`file`，可以这样写:
+    `command 2 > file`
+- 如果希望将`stdout`和`stderr`合并后重定向到`file`，可以这样写:
+    `command > file 2>&1`
+- `command`命令将`stdin`重定向到`file1`，将`stdout`重定向到`file2`。
+    `command < file1 > file2`
+
+####/dev/null
+
+如果希望执行某个命令，但又不希望在屏幕上显示输出结果，那么可以将输出重定向到/dev/null：
+`command > /dev/null `
+
+如果希望屏蔽 stdout 和 stderr，可以这样写：
+`command > /dev/null 2>&1`
+
+###introduce another file
+
+`. filename`or `source filename`
+
+for exampel:
+
+`. ./test.sh` or `source ./test.sh`
 
 
 
