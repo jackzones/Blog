@@ -4,4 +4,210 @@
 .代表当前文件夹
 /代表系统根目录
 
+###Run the shell scipt 
+`test.sh`
+```shell
+#!/bin/bash
+echo 'Hello World!'
+```
+
+- as executable program
+```shell
+chmod +x ./test.sh #the executable authority
+./test.sh           #execute the script
+```
+`./`means looking for the scrpt in the current directory.
+
+- as interpreter's argument
+```shell
+/bin/sh test.sh
+/bin/php test.sh 
+```
+It's not neccessary for the `#!/bin/bash` in the first line.
+
+- own 
+`sh +x test.sh`
+
+###Variables
+
+- Define the variables
+`your_name='nelson'`
+
+**There is no spaces around the =**
+- Use the variables
+`echo ${your_name}`
+
+
+####Readonly variables
+Once define the readonly variables,the value can't be changed.
+```shell
+#!/bin/bash
+your_name='nelson'
+readonly your_name 
+```
+
+####Delete the variables
+`unset variable_name` The readonly variables can not be deleted.
+
+###String
+
+字符串可以用单引号，也可以用双引号，也可以不用引号.
+
+单引号字符串的限制：
+
+- 单引号里的任何字符都会原样输出，单引号字符串中的变量是无效的；
+- 单引号字串中不能出现单引号（对单引号使用转义符后也不行）
+
+双引号的优点：
+
+- 双引号里可以有变量
+- 双引号里可以出现转义字符
+
+####the lengce of the string
+```shell
+string="abcd"
+echo ${#string}
+```
+
+###Array
+
+`array_name=(value0 value1 value2 value3 value4)`
+
+####fetch the value
+`${array_name[num]}`
+`num=@`fetch all the array's value 
+
+####the length of the array
+`length=${#array_name[@]}`or`length=${#array_name[*]}`
+
+####the length of the element 
+`length=${#array_name[n]}`
+
+###运算符
+
+原生bash不支持简单的数学运算，但是可以通过其他命令来实现，例如 awk 和 expr，expr 最常用。
+
+expr 是一款表达式计算工具，使用它能完成表达式的求值操作。 
+```shell
+val=`expr 2 + 2`
+echo "${val}"
+```
+
+两点注意：
+
+- 表达式和运算符之间要有空格，例如 2+2 是不对的，必须写成 2 + 2，这与我们熟悉的大多数编程语言不一样。
+- 完整的表达式要被 ` ` 包含，注意这个字符不是常用的单引号，在 Esc 键下边。
+
+####算术运算符
+加，减，乘，除，取余，赋值，==，!= 
+
+注意：条件表达式要放在方括号之间，并且要有空格，例如: [$a==$b] 是错误的，必须写成 [ $a == $b ]
+
+| operator |            specification            |         example         |
+|----------|-------------------------------------|-------------------------|
+| ==       | 用于比较两个数字，相同则返回 true   | [ $a == $b ] 返回 false |
+| !=       | 用于比较两个数字，不相同则返回 true | [ $a != $b ] 返回 true  |
+
+####关系运算符 
+关系运算符只支持数字，不支持字符串，除非字符串的值是数字。假定变量 a 为 10，变量 b 为 20：
+`great than,less than,equel to `
+
+| operator |          specification           |          example          |
+|----------|----------------------------------|---------------------------|
+| -eq      | 检查两个数是否相等，相等返回true | [ $a -eq $b ] 返回：false |
+| -ne      | 不相等返回true                   | [ $a -ne $b ] 返回true    |
+| -gt      | 左大于右，返回true               | [ $a -gt $b ] false       |
+| -lt      | 左小于右，返回ture               | [ $a -lt $b ] true        |
+| -ge      | 大于等于，true                   | [ $a -ge $b ] fale        |
+| -le      | 小于等于，true                   | [ $a -le $b ] true        |
+
+####布尔运算符
+
+下表列出了常用的布尔运算符，假定变量 a 为 10，变量 b 为 20：
+
+| operator | specification |                example                |
+|----------|---------------|---------------------------------------|
+| !        | 非            | [ !false ] true                       |
+| -o       | 或            | [ $a -lt 20 -o $b -gt 100 ] 返回 true |
+| -a       | 与            | [ $a -lt 20 -a $b -gt 100 ] 返回 false                                      |
+
+####逻辑运算符
+
+以下介绍 Shell 的逻辑运算符，假定变量 a 为 10，变量 b 为 20
+
+| operator | specification |                  example                  |
+|----------|---------------|-------------------------------------------|
+| &&       | 逻辑and       | [[ $a -lt 100 && $b -gt 100 ]] 返回 false | 
+
+||               逻辑or       [[ $a -lt 100 || $b -gt 100 ]] 返回 true
+
+####字符串运算符
+下表列出了常用的字符串运算符，假定变量 a 为 "abc"，变量 b 为 "efg"：
+
+| operator |            specification             |      example      |
+|----------|--------------------------------------|-------------------|
+| =        | 检测两边是否相等                     | [ $a = $b ] false |
+| !=       | 不相等返回                           | [ $a != $b ] true |
+| -z       | 检查字符串是否为0，为零true          | [ -z $a ] false   |
+| -n       | 检查字符串是否为0，不为零true        | [ -n $b ]true     |
+| str      | 检查字符串是否为空，不为空，返回true | [ $b ] true                   |
+
+####文件测试运算符
+
+文件测试运算符用于检测 Unix 文件的各种属性.[属性检测描述如下](http://www.runoob.com/linux/linux-shell-basic-operators.html)
+
+
+- file
+- function
+- redirect to 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
