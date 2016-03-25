@@ -1,3 +1,41 @@
+<!-- MarkdownTOC -->
+
+- [hell语法](#hell语法)
+    - [和/](#和)
+    - [un the shell scipt](#un-the-shell-scipt)
+    - [ariables](#ariables)
+        - [eadonly variables](#eadonly-variables)
+        - [elete the variables](#elete-the-variables)
+    - [tring](#tring)
+        - [he lengce of the string](#he-lengce-of-the-string)
+    - [rray](#rray)
+        - [etch the value](#etch-the-value)
+        - [he length of the array](#he-length-of-the-array)
+        - [he length of the element](#he-length-of-the-element)
+    - [算符](#算符)
+        - [术运算符](#术运算符)
+        - [系运算符](#系运算符)
+        - [尔运算符](#尔运算符)
+        - [辑运算符](#辑运算符)
+        - [符串运算符](#符串运算符)
+        - [件测试运算符](#件测试运算符)
+    - [程控制](#程控制)
+        - [f](#f)
+        - [f else](#f-else)
+        - [f else-if else](#f-else-if-else)
+        - [or](#or)
+        - [hile](#hile)
+        - [ntil](#ntil)
+        - [ase](#ase)
+    - [hell function](#hell-function)
+        - [unction argument](#unction-argument)
+    - [/O,Redirect](#oredirect)
+        - [edirect](#edirect)
+        - [dev/null](#devnull)
+    - [ntroduce another file](#ntroduce-another-file)
+
+<!-- /MarkdownTOC -->
+
 ##Shell语法
 
 ###.和/
@@ -126,8 +164,11 @@ echo "${val}"
 | !=       | 用于比较两个数字，不相同则返回 true | [ $a != $b ] 返回 true  |
 
 - $(())
+
     `r=$(( 4 + 5 ))` 
+
 - $[]
+
     `r=$[ 4 + 5 ]`
 
 ####关系运算符 
