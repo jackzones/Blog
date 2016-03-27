@@ -125,13 +125,13 @@ echo "${val}"
 | ==       | 用于比较两个数字，相同则返回 true   | [ $a == $b ] 返回 false |
 | !=       | 用于比较两个数字，不相同则返回 true | [ $a != $b ] 返回 true  |
 
-- $(())
+- $(()),no influence on the space
 
-    `r=$(( 4 + 5 ))` 
+    `r=$((4+5))` 
 
-- $[]
+- $[],no influence on the space
 
-    `r=$[ 4 + 5 ]`
+    `r=$[4+5]`
 
 ####关系运算符 
 关系运算符只支持数字，不支持字符串，除非字符串的值是数字。假定变量 a 为 10，变量 b 为 20：
@@ -173,7 +173,7 @@ echo "${val}"
 |----------|--------------------------------------|-------------------|
 | =        | 检测两边是否相等                     | [ $a = $b ] false |
 | !=       | 不相等返回                           | [ $a != $b ] true |
-| -z       | 检查字符串是否为0，为零true          | [ -z $a ] false   |
+| -z       | 检查字符串是否为0，为零true![]()
 | -n       | 检查字符串是否为0，不为零true        | [ -n $b ]true     |
 | str      | 检查字符串是否为空，不为空，返回true | [ $b ] true                   |
 
@@ -210,12 +210,12 @@ else
 fi
 ```
 
-####if else-if else
+####if elif else
 
 ```shell
 if condition1; then
     command1
-else-if condition2
+elif condition2; then
     command2
 else 
     commandN
@@ -302,8 +302,9 @@ func_name(){
 ###I/O,Redirect
 
 | commands | specification |
-`n >& m`     `将输出文件 m 和 n 合并`
-`n <& m`     `将输入文件 m 和 n 合并`
+|------------|--------------------|
+|`n >& m` |    `将输出文件 m 和 n 合并`|
+|`n <& m`  |   `将输入文件 m 和 n 合并`|
 
 ####Redirect
 
@@ -336,6 +337,18 @@ func_name(){
 for exampel:
 
 `. ./test.sh` or `source ./test.sh`
+
+###date表示
+
+####formatting
+
+`now=$(date +%Y%m%d);echo $now` result: `20160327`
+
+####转化成s,进行计算
+
+`%s`represent the seconds between the time to the 1970.So we can 计算任何时间之间的时间差,以1970为标准.
+`date +%s` : `1459089581` equle 46 years
+
 
 
 
