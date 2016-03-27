@@ -342,7 +342,14 @@ for exampel:
 
 ####formatting
 
-`now=$(date +%Y%m%d);echo $now` result: `20160327`
+`now=$(date +%Y%m%d);echo $now` 
+or 
+
+```shell
+now=`date +%Y%m%d`;echo $now 
+```
+
+result:`20160327`
 
 ####转化成s,进行计算
 
