@@ -125,11 +125,11 @@ echo "${val}"
 | ==       | 用于比较两个数字，相同则返回 true   | [ $a == $b ] 返回 false |
 | !=       | 用于比较两个数字，不相同则返回 true | [ $a != $b ] 返回 true  |
 
-- $(()),no influence on the space
+- $(()),no influence on the space,推荐使用此方法！
 
     `r=$((4+5))` 
 
-- $[],no influence on the space
+- $[],no influence on the space,not work in the ubuntu with complex expression
 
     `r=$[4+5]`
 
