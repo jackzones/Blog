@@ -2,6 +2,7 @@
 
 #让使用者输入一个数字，程式可以由 1+2+3... 一直累加到使用者输入的数字为止。
 
+#while循环,
 read -p "Enter you number:" num
 n=1
 s=0
