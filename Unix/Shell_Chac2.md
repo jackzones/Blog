@@ -16,6 +16,24 @@ do
 done 
 ```
 
+###shift命令
+参数左移
+
+```shell
+#测试 shift 命令(x_shift.sh)
+until [ $# -eq 0 ]
+do
+echo "第一个参数为: $1 参数个数为: $#"
+shift
+done
+$./x_shift.sh 1 2 3 4
+
+第一个参数为: 1 参数个数为: 4
+第一个参数为: 2 参数个数为: 3
+第一个参数为: 3 参数个数为: 2
+第一个参数为: 4 参数个数为: 1
+```
+
 
 ###Run the shell scipt 
 `test.sh`
@@ -275,7 +293,24 @@ do
 done
 ```
 
+
 `for var in iterm1 iterm2 itermN; do command1; do command2; done;`
+
+example:
+
+```shell
+#利用循环计算10的阶乘
+
+s=1
+#for i in `seq 1 10`
+for i in {1..10} #这两种表示法都可以
+do
+    s=$(($i*$s)) #s=$[$i*$s]
+
+done
+echo "10!=$s"
+```
+
 
 ####while
 
