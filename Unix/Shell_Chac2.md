@@ -4,6 +4,19 @@
 .代表当前文件夹
 /代表系统根目录
 
+###命令替换$(cmd)or``
+
+```shell
+user_names=`cat /etc/passwd|sed '1,10d'|cut -d : -f 1`  #直接写会执行,这样不执行,此为[命令替换](shell_Char2.sh),也可用$()
+n=1
+for user_name in $user_names
+do
+    echo The $n account is "${user_name}"
+    n=$(($n+1)) 
+done 
+```
+
+
 ###Run the shell scipt 
 `test.sh`
 
@@ -179,7 +192,36 @@ echo "${val}"
 
 ####文件测试运算符
 
-文件测试运算符用于检测 Unix 文件的各种属性.[属性检测描述如下](http://www.runoob.com/linux/linux-shell-basic-operators.html)
+文件测试运算符用于检测 Unix 文件的各种属性.
+
+```shell
+Conditional Logic on Files
+-a file exists.
+-b file exists and is a block special file.
+-c file exists and is a character special file.
+-d file exists and is a directory.
+-e file exists (just the same as -a).
+-f file exists and is a regular file.
+-g file exists and has its setgid(2) bit set.
+-G file exists and has the same group ID as this process.
+-k file exists and has its sticky bit set.
+-L file exists and is a symbolic link.
+-n string length is not zero.
+-o Named option is set on.
+-O file exists and is owned by the user ID of this process.
+-p file exists and is a first in, first out (FIFO) special file or
+named pipe.
+-r file exists and is readable by the current process.
+-s file exists and has a size greater than zero.
+-S file exists and is a socket.
+-t file descriptor number fildes is open and associated with a
+terminal device.
+-u file exists and has its setuid(2) bit set.
+-w file exists and is writable by the current process.
+-x file exists and is executable by the current process.
+-z string length is zero.
+```
+
 
 ###流程控制
 shell的流程控制不可为空.

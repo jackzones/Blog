@@ -1,7 +1,7 @@
 #计算还有多少天过生日
 #!/bin/bash
 read -p "Enter you birthday (MMDD,ex>0707)" bth #-p,show the tips
-now=$(date +%m%d)  #format date
+now=$(date +%m%d)  #format date,命令替换
 
 #now == birthday
 if [ $bth -eq $now ]; then
